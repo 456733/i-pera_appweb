@@ -1,0 +1,25 @@
+<h2>Inventario</h2>
+
+<table>
+
+<tr>
+<th>Marca</th>
+<th>Modelo</th>
+<th>Precio</th>
+<th>Cantidad</th>
+</tr>
+
+{% for c in celulares %}
+
+<tr>
+
+<td>{{c.marca}}</td>
+<td>{{c.modelo}}</td>
+<td>{{c.precio}}</td>
+<td>{{c.cantidad}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
