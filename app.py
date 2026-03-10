@@ -10,7 +10,7 @@ db = mysql.connector.connect(
     host="localhost",
     user="root",
     password="1323",
-    database="ipera"
+    database="ipera_db"
 )
 
 cursor = db.cursor(dictionary=True)
@@ -28,17 +28,17 @@ def login():
 @app.route("/login", methods=["POST"])
 def login_user():
 
-    username = request.form["username"]
+    usuario= request.form["usuario"]
     password = request.form["password"]
 
-    sql = "SELECT * FROM usuarios WHERE username=%s AND password=%s"
-    cursor.execute(sql,(username,password))
+    sql = "SELECT * FROM usuarios WHERE usuario=%s AND password=%s"
+    cursor.execute(sql,(usuario,password))
 
     user = cursor.fetchone()
 
     if user:
 
-        session["user"] = user["username"]
+        session["user"] = user["usuario"]
         session["rol"] = user["rol"]
 
         if user["rol"] == "admin":
@@ -110,14 +110,14 @@ def agregar_celular():
     marca = request.form["marca"]
     modelo = request.form["modelo"]
     precio = request.form["precio"]
-    cantidad = request.form["cantidad"]
+    stock = request.form["stock"]
 
     sql = """
-    INSERT INTO celulares (marca,modelo,precio,cantidad)
+    INSERT INTO celulares (marca,modelo,precio,stock)
     VALUES (%s,%s,%s,%s)
     """
 
-    cursor.execute(sql,(marca,modelo,precio,cantidad))
+    cursor.execute(sql,(marca,modelo,precio,stock))
     db.commit()
 
     return redirect("/inventario")
@@ -160,15 +160,15 @@ def actualizar_celular():
     marca = request.form["marca"]
     modelo = request.form["modelo"]
     precio = request.form["precio"]
-    cantidad = request.form["cantidad"]
+    stock = request.form["stock"]
 
     sql = """
     UPDATE celulares
-    SET marca=%s, modelo=%s, precio=%s, cantidad=%s
+    SET marca=%s, modelo=%s, precio=%s, stock=%s
     WHERE id=%s
     """
 
-    cursor.execute(sql,(marca,modelo,precio,cantidad,id))
+    cursor.execute(sql,(marca,modelo,precio,stock,id))
     db.commit()
 
     return redirect("/inventario")
@@ -181,15 +181,15 @@ def actualizar_celular():
 @app.route("/registrar_vendedor", methods=["POST"])
 def registrar_vendedor():
 
-    username = request.form["username"]
+    usuario = request.form["usuario"]
     password = request.form["password"]
 
     sql = """
-    INSERT INTO usuarios (username,password,rol)
+    INSERT INTO usuarios (usuario,password,rol)
     VALUES (%s,%s,'vendedor')
     """
 
-    cursor.execute(sql,(username,password))
+    cursor.execute(sql,(usuario,password))
     db.commit()
 
     return redirect("/admin")
@@ -221,22 +221,25 @@ def registrar_venta():
     precio = request.form["precio"]
     metodo_pago = request.form["metodo_pago"]
 
-    # registrar venta
+    # verificar inventario
+    cursor.execute("SELECT stock FROM celulares WHERE id=%s",(celular_id,))
+    celular = cursor.fetchone()
 
+    if celular["stock"] <= 0:
+        return "No hay stock disponible"
+
+    # registrar venta
     sql = """
     INSERT INTO ventas (celular_id,precio,metodo_pago)
     VALUES (%s,%s,%s)
     """
 
     cursor.execute(sql,(celular_id,precio,metodo_pago))
-    db.commit()
-
 
     # actualizar inventario
-
     sql_update = """
     UPDATE celulares
-    SET cantidad = cantidad - 1
+    SET stock = stock - 1
     WHERE id=%s
     """
 
@@ -244,7 +247,6 @@ def registrar_venta():
     db.commit()
 
     return "Venta registrada correctamente"
-
 
 # ===============================
 # VER VENTAS

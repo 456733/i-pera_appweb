@@ -1,25 +1,41 @@
-<h2>Inventario</h2>
+<!DOCTYPE html>
+<html>
 
-<table>
+<head>
+    <title>Inventario</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
 
-<tr>
-<th>Marca</th>
-<th>Modelo</th>
-<th>Precio</th>
-<th>Cantidad</th>
-</tr>
+<body>
 
-{% for c in celulares %}
+    <div class="container">
 
-<tr>
+        <h2>Inventario</h2>
 
-<td>{{c.marca}}</td>
-<td>{{c.modelo}}</td>
-<td>{{c.precio}}</td>
-<td>{{c.cantidad}}</td>
+        <table>
 
-</tr>
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Precio</th>
+                <th>Stock</th>
+            </tr>
 
-{% endfor %}
+            {% for c in celulares %}
 
-</table>
+            <tr>
+                <td>{{c.marca}}</td>
+                <td>{{c.modelo}}</td>
+                <td>{{c.precio}}</td>
+                <td>{{c.stock}}</td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>

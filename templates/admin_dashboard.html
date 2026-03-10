@@ -1,31 +1,25 @@
-<h1>Panel Administrador</h1>
+<!DOCTYPE html>
+<html>
 
-<a href="/inventario">Ver Inventario</a>
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
 
-<h2>Registrar Vendedor</h2>
+<body>
 
-<form action="/registrar_vendedor" method="POST">
+    <header>
+        <h2>Panel Administrador</h2>
+    </header>
 
-<input type="text" name="username" placeholder="Usuario vendedor">
+    <div class="container">
 
-<input type="password" name="password" placeholder="Contraseña">
+        <a href="/inventario"><button>Inventario</button></a>
+        <a href="/agregar_celular"><button>Agregar Celular</button></a>
+        <a href="/registrar_vendedor"><button>Registrar Vendedor</button></a>
 
-<button>Registrar</button>
+    </div>
 
-</form>
+</body>
 
-<h2>Agregar Celular</h2>
-
-<form action="/agregar_celular" method="POST">
-
-<input type="text" name="marca" placeholder="Marca">
-
-<input type="text" name="modelo" placeholder="Modelo">
-
-<input type="number" name="precio" placeholder="Precio">
-
-<input type="number" name="cantidad" placeholder="Cantidad">
-
-<button>Agregar</button>
-
-</form>
+</html>
