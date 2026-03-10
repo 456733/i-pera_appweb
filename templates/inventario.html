@@ -8,9 +8,35 @@
 
 <body>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <header>
+        <h2>Inventario</h2>
+
+        <div style="margin-bottom: 20px;">
+            {% if session['rol'] == 'admin' %}
+            <a href="/admin"><button style="background-color: #6c757d;">&larr; Volver al Panel Admin</button></a>
+            {% else %}
+            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
+            {% endif %}
+        </div>
+    </header>
+
     <div class="container">
 
-        <h2>Inventario</h2>
+        {% if session['rol'] == 'admin' %}
+        <div style="margin-bottom: 20px;">
+            <a href="/agregar_celular"><button>+ Agregar Nuevo Celular</button></a>
+        </div>
+        {% endif %}
 
         <table>
 
@@ -19,6 +45,9 @@
                 <th>Modelo</th>
                 <th>Precio</th>
                 <th>Stock</th>
+                {% if session['rol'] == 'admin' %}
+                <th>Acciones</th>
+                {% endif %}
             </tr>
 
             {% for c in celulares %}
@@ -28,6 +57,13 @@
                 <td>{{c.modelo}}</td>
                 <td>{{c.precio}}</td>
                 <td>{{c.stock}}</td>
+                {% if session['rol'] == 'admin' %}
+                <td>
+                    <a href="/editar_celular/{{c.id}}">Editar</a> |
+                    <a href="/eliminar_celular/{{c.id}}"
+                        onclick="return confirm('¿Seguro que deseas eliminar este equipo?');">Eliminar</a>
+                </td>
+                {% endif %}
             </tr>
 
             {% endfor %}

@@ -8,40 +8,89 @@
 
 <body>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <header>
+        <h2>Registrar Venta</h2>
+    </header>
+
     <div class="container">
 
-        <h2>Registrar Venta</h2>
+        <div style="margin-bottom: 20px;">
+            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
+        </div>
 
-        <form method="POST">
+        <form action="/registrar_venta" method="POST">
 
             <label>Celular</label>
 
-            <select name="celular_id">
-
+            <select name="celular_id" required>
+                <option value="">-- Seleccione un producto --</option>
                 {% for c in celulares %}
-
-                <option value="{{c.id}}">
-                    {{c.marca}} {{c.modelo}}
-                </option>
-
+                <option value="{{c.id}}">{{c.marca}} {{c.modelo}} (Stk: {{c.stock}})</option>
                 {% endfor %}
-
             </select>
+
+            <label>Precio de Venta</label>
+            <input type="number" name="precio" min="0" step="0.01" required>
 
             <label>Método de pago</label>
-
-            <select name="metodo_pago">
-
-                <option>efectivo</option>
-                <option>tarjeta</option>
-
+            <select name="metodo_pago" id="metodo_pago" onchange="mostrarCamposPago()" required>
+                <option value="">-- Seleccione --</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta (Débito/Crédito)</option>
+                <option value="plataformas">Plataformas digitales</option>
             </select>
 
-            <button>Registrar Venta</button>
+            <div id="campos_tarjeta"
+                style="display:none; margin-top:10px; padding:15px; background:#f9f9f9; border:1px solid #ccc; border-radius:5px;">
+                <label>Tipo de Tarjeta</label>
+                <select name="tipo_tarjeta">
+                    <option value="credito">Crédito</option>
+                    <option value="debito">Débito</option>
+                </select>
+                <label>Número de Tarjeta</label>
+                <input type="text" name="numero_tarjeta" placeholder="1234 5678 1234 5678" pattern="\d*">
+                <label>Nombre del Titular</label>
+                <input type="text" name="titular_tarjeta">
+                <label>Fecha Venc. (MM/YY)</label>
+                <input type="text" name="vencimiento_tarjeta" placeholder="MM/YY">
+                <label>CVV</label>
+                <input type="text" name="cvv_tarjeta" placeholder="123" maxlength="4">
+            </div>
+
+            <div id="campos_plataformas"
+                style="display:none; margin-top:10px; padding:15px; background:#f9f9f9; border:1px solid #ccc; border-radius:5px; text-align:center;">
+                <p><strong>Transferencia: </strong> 300 123 4567</p>
+                <!-- O aquí iría tu código QR -->
+                <div
+                    style="width:120px; height:120px; background:#ddd; margin:10px auto; line-height:120px; border:2px dashed #999;">
+                    [CÓDIGO QR]</div>
+                <label style="text-align:left;">Número de Comprobante</label>
+                <input type="text" name="comprobante_pago" placeholder="# de transferencia">
+            </div>
+
+            <button type="submit" style="margin-top:20px;">Confirmar y Registrar Venta</button>
 
         </form>
 
     </div>
+
+    <script>
+        function mostrarCamposPago() {
+            var metodo = document.getElementById("metodo_pago").value;
+            document.getElementById("campos_tarjeta").style.display = (metodo === "tarjeta") ? "block" : "none";
+            document.getElementById("campos_plataformas").style.display = (metodo === "plataformas") ? "block" : "none";
+        }
+    </script>
 
 </body>
 

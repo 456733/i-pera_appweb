@@ -8,13 +8,25 @@
 
 <body>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
     <header>
-        <h2>Panel Vendedor</h2>
+        <h2>Panel Vendedor ({{ session['user'] }})</h2>
+        <a href="/logout">Cerrar Sesión</a>
     </header>
 
     <div class="container">
 
         <a href="/registrar_venta"><button>Registrar Venta</button></a>
+        <a href="/ventas"><button>Ver Historial de Ventas</button></a>
         <a href="/inventario"><button>Ver Inventario</button></a>
 
     </div>

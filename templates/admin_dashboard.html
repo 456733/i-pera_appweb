@@ -8,15 +8,43 @@
 
 <body>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
     <header>
-        <h2>Panel Administrador</h2>
+        <h2>Panel Administrador ({{ session['user'] }})</h2>
+        <a href="/logout">Cerrar Sesión</a>
     </header>
 
     <div class="container">
 
         <a href="/inventario"><button>Inventario</button></a>
-        <a href="/agregar_celular"><button>Agregar Celular</button></a>
         <a href="/registrar_vendedor"><button>Registrar Vendedor</button></a>
+
+        <hr>
+        <h3>Vendedores Registrados</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Acción</th>
+            </tr>
+            {% for v in vendedores %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.usuario }}</td>
+                <td><a href="/eliminar_vendedor/{{v.id}}"
+                        onclick="return confirm('¿Eliminar vendedor {{v.usuario}}?');">Eliminar</a></td>
+            </tr>
+            {% endfor %}
+        </table>
 
     </div>
 

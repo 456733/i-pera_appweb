@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Historial de Ventas</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    <header>
+        <h2>Historial de Ventas</h2>
+    </header>
+
+    <div class="container">
+
+        <div style="margin-bottom: 20px;">
+            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
+        </div>
+
+        <table>
+            <tr>
+                <th>ID Venta</th>
+                <th>Celular</th>
+                <th>Precio</th>
+                <th>Método Pago</th>
+                <th>Fecha</th>
+            </tr>
+            {% for v in ventas %}
+            <tr>
+                <td>{{v.id}}</td>
+                <td>{{v.marca}} {{v.modelo}}</td>
+                <td>{{v.precio}}</td>
+                <td>{{v.metodo_pago}}</td>
+                <td>{{v.fecha}}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align:center;">No hay ventas registradas.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+</html>

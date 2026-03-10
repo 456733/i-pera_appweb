@@ -2,12 +2,11 @@
 <html>
 
 <head>
-    <title>Agregar Celular</title>
+    <title>Editar Celular</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 
 <body>
-
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <ul class="flashes">
@@ -19,7 +18,7 @@
     {% endwith %}
 
     <header>
-        <h2>Agregar Celular</h2>
+        <h2>Editar Celular</h2>
     </header>
 
     <div class="container">
@@ -28,26 +27,24 @@
             <a href="/inventario"><button style="background-color: #6c757d;">&larr; Volver al Inventario</button></a>
         </div>
 
-        <form method="POST">
+        <form action="/actualizar_celular" method="POST">
+            <input type="hidden" name="id" value="{{ celular.id }}">
 
             <label>Marca</label>
-            <input type="text" name="marca">
+            <input type="text" name="marca" value="{{ celular.marca }}" required>
 
             <label>Modelo</label>
-            <input type="text" name="modelo">
+            <input type="text" name="modelo" value="{{ celular.modelo }}" required>
 
             <label>Precio</label>
-            <input type="number" name="precio" step="0.01" required>
+            <input type="number" name="precio" step="0.01" value="{{ celular.precio }}" required>
 
             <label>Stock</label>
-            <input type="number" name="stock" required>
+            <input type="number" name="stock" value="{{ celular.stock }}" required>
 
-            <button>Guardar Celular</button>
-
+            <button type="submit">Actualizar Celular</button>
         </form>
-
     </div>
-
 </body>
 
 </html>
