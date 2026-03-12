@@ -98,13 +98,13 @@
                     <option value="debito">Débito</option>
                 </select>
                 <label>Número de Tarjeta</label>
-                <input type="text" name="numero_tarjeta" placeholder="1234 5678 1234 5678" pattern="\d*">
+                <input type="text" name="numero_tarjeta" id="numero_tarjeta" placeholder="1234 5678 1234 5678" pattern="\d{16}" minlength="16" maxlength="16" title="Debe contener exactamente 16 números">
                 <label>Nombre del Titular</label>
-                <input type="text" name="titular_tarjeta">
+                <input type="text" name="titular_tarjeta" id="titular_tarjeta">
                 <label>Fecha Venc. (MM/YY)</label>
-                <input type="text" name="vencimiento_tarjeta" placeholder="MM/YY">
+                <input type="text" name="vencimiento_tarjeta" id="vencimiento_tarjeta" placeholder="MM/YY" pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Formato requerido: MM/YY">
                 <label>CVV</label>
-                <input type="text" name="cvv_tarjeta" placeholder="123" maxlength="4">
+                <input type="text" name="cvv_tarjeta" id="cvv_tarjeta" placeholder="123" pattern="\d{3,4}" minlength="3" maxlength="4" title="Debe ser un número de 3 o 4 dígitos">
             </div>
 
             <div id="campos_plataformas"
@@ -127,8 +127,20 @@
     <script>
         function mostrarCamposPago() {
             var metodo = document.getElementById("metodo_pago").value;
-            document.getElementById("campos_tarjeta").style.display = (metodo === "tarjeta") ? "block" : "none";
-            document.getElementById("campos_plataformas").style.display = (metodo === "plataformas") ? "block" : "none";
+            
+            // Toggle visibility
+            let camposTarjeta = document.getElementById("campos_tarjeta");
+            let camposPlataformas = document.getElementById("campos_plataformas");
+            
+            camposTarjeta.style.display = (metodo === "tarjeta") ? "block" : "none";
+            camposPlataformas.style.display = (metodo === "plataformas") ? "block" : "none";
+
+            // Toggle 'required' limits logically based on visibility
+            let esTarjeta = (metodo === "tarjeta");
+            document.getElementById("numero_tarjeta").required = esTarjeta;
+            document.getElementById("titular_tarjeta").required = esTarjeta;
+            document.getElementById("vencimiento_tarjeta").required = esTarjeta;
+            document.getElementById("cvv_tarjeta").required = esTarjeta;
         }
 
         let totalCarrito = 0;
@@ -213,9 +225,46 @@
             let inputs = document.getElementsByName("celular_id[]");
             if (inputs.length === 0) {
                 e.preventDefault();
-                alert("El carrito está vacío. Añada al menos un producto antes de registrar la venta.");
+                alert("Operación rechazada: El carrito está vacío. Añada al menos un producto.");
+                return;
+            }
+
+            let metodo = document.getElementById("metodo_pago").value;
+            if (metodo === "tarjeta") {
+                let vencimiento = document.getElementById("vencimiento_tarjeta").value;
+                if (!validarVencimiento(vencimiento)) {
+                    e.preventDefault();
+                    alert("Operación rechazada: La tarjeta ingresada ya está vencida o la fecha es inválida.");
+                }
             }
         });
+
+        // Función que verifica MM/YY contra la fecha actual
+        function validarVencimiento(fechaStr) {
+            // Asume formato MM/YY (validado antes por regex pattern)
+            let partes = fechaStr.split('/');
+            if (partes.length !== 2) return false;
+
+            let mes = parseInt(partes[0], 10);
+            let anio = parseInt(partes[1], 10);
+
+            if (isNaN(mes) || isNaN(anio) || mes < 1 || mes > 12) return false;
+
+            // Convertir YY a YYYY (asumiendo 2000+)
+            anio += 2000;
+
+            let fechaActual = new Date();
+            let mesActual = fechaActual.getMonth() + 1; // 0-indexed
+            let anioActual = fechaActual.getFullYear();
+
+            if (anio < anioActual) {
+                return false; // Año pasado
+            } else if (anio === anioActual && mes < mesActual) {
+                return false; // Mismo año, mes pasado
+            }
+
+            return true; // Tarjeta válida
+        }
     </script>
 
 </body>

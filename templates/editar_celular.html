@@ -40,10 +40,10 @@
             <input type="text" name="modelo" value="{{ celular.modelo }}" required>
 
             <label>Precio</label>
-            <input type="number" name="precio" step="0.01" value="{{ celular.precio }}" required>
+            <input type="number" name="precio" step="0.01" min="0" value="{{ celular.precio }}" required>
 
             <label>Stock</label>
-            <input type="number" name="stock" value="{{ celular.stock }}" required>
+            <input type="number" name="stock" min="0" value="{{ celular.stock }}" required>
 
             <button type="submit" class="btn-principal">Actualizar Celular</button>
         </form>
