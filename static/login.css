@@ -120,3 +120,68 @@ body {
     font-weight: 500;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+
+/* ============================= */
+/*       ANIMACION DE ENTRADA    */
+/* ============================= */
+
+/* Contenedor que cubre toda la pantalla inicialmente */
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #F6F3EA; /* Fondo Aa */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOutIntro 0.8s ease-in-out 2.5s forwards; /* Desaparece después de 2.5s */
+}
+
+/* La pera girando suavemente y haciendo un efecto de pulso */
+.intro-logo {
+    width: 120px;
+    height: auto;
+    border-radius: 25px; /* Bordes redondeados añadidos */
+    animation: 
+        pulseLogo 1.5s ease-in-out infinite alternate, /* Late */
+        zoomOutLogo 0.8s ease-in-out 2.2s forwards; /* Se achica al desaparecer la pantalla */
+}
+
+/* Ocultar el contenedor principal de login al principio */
+.login-container {
+    opacity: 0;
+    transform: translateY(20px); /* Ligeramente abajo */
+    animation: fadeInForm 0.8s ease-out 2.8s forwards; /* Sube y aparece después de que la intro se va */
+    
+    background: #C2CDD5; /* Tarjetas / secciones (Dd) */
+    padding: 40px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(48, 56, 84, 0.2); 
+    text-align: center;
+}
+
+/* Keyframes */
+@keyframes pulseLogo {
+    0% { transform: scale(1); filter: drop-shadow(0px 0px 5px rgba(48, 56, 84, 0.2)); }
+    100% { transform: scale(1.15); filter: drop-shadow(0px 10px 20px rgba(48, 56, 84, 0.4)); }
+}
+
+@keyframes zoomOutLogo {
+    0% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(0.5); opacity: 0; }
+}
+
+@keyframes fadeOutIntro {
+    0% { opacity: 1; visibility: visible; }
+    99% { opacity: 0; visibility: visible; }
+    100% { opacity: 0; visibility: hidden; display: none; }
+}
+
+@keyframes fadeInForm {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
