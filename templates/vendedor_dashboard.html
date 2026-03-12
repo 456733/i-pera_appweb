@@ -21,10 +21,21 @@
     <header>
         <div style="display: flex; align-items: center; gap: 10px;">
             <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-            <h2>Panel Vendedor ({{ session['user'] }})</h2>
+            <div class="header-title-card">
+                <div class="header-loader">
+                    <p>Panel</p>
+                    <div class="header-words">
+                        <span class="header-word">Vendedor</span>
+                        <span class="header-word">iPera</span>
+                        <span class="header-word">{{ session['user'] }}</span>
+                        <span class="header-word">de Gestión</span>
+                        <span class="header-word">Vendedor</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="header-buttons">
-            <a href="/logout"><button style="background-color: #dc3545;">Cerrar Sesión</button></a>
+            <a href="/logout"><button class="btn-logout">Cerrar Sesión</button></a>
         </div>
     </header>
 
