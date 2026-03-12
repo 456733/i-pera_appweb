@@ -18,17 +18,19 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Historial de Ventas</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Historial de Ventas</h2>
+        </div>
+        <div class="header-buttons">
+            <a href="/vendedor"><button class="btn-secundario">&larr; Volver al Panel</button></a>
+        </div>
     </header>
 
     <div class="container">
 
-        <div style="margin-bottom: 20px;">
-            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
-        </div>
-
-        <table>
+        <div class="tabla-wrapper">
+            <table class="tabla-reservas">
             <tr>
                 <th>ID Venta</th>
                 <th>Celular</th>
@@ -51,7 +53,8 @@
                 <td colspan="5" style="text-align:center;">No hay ventas registradas.</td>
             </tr>
             {% endfor %}
-        </table>
+            </table>
+        </div>
     </div>
 </body>
 

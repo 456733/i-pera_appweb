@@ -19,14 +19,16 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Inventario</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Inventario</h2>
+        </div>
 
-        <div style="margin-bottom: 20px;">
+        <div class="header-buttons">
             {% if session['rol'] == 'admin' %}
-            <a href="/admin"><button style="background-color: #6c757d;">&larr; Volver al Panel Admin</button></a>
+            <a href="/admin"><button class="btn-secundario">&larr; Volver al Panel Admin</button></a>
             {% else %}
-            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
+            <a href="/vendedor"><button class="btn-secundario">&larr; Volver al Panel Vendedor</button></a>
             {% endif %}
         </div>
     </header>
@@ -34,12 +36,13 @@
     <div class="container">
 
         {% if session['rol'] == 'admin' %}
-        <div style="margin-bottom: 20px;">
-            <a href="/agregar_celular"><button>+ Agregar Nuevo Celular</button></a>
+        <div style="width: 100%; max-width: 1000px; text-align: right; margin-bottom: 15px;">
+            <a href="/agregar_celular" style="text-decoration: none;"><button class="btn-principal" style="width: auto; padding: 10px 20px;">+ Agregar Nuevo Celular</button></a>
         </div>
         {% endif %}
 
-        <table>
+        <div class="tabla-wrapper">
+            <table class="tabla-reservas">
 
             <tr>
                 <th>Marca</th>
@@ -69,7 +72,8 @@
 
             {% endfor %}
 
-        </table>
+            </table>
+        </div>
 
     </div>
 

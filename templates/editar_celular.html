@@ -18,17 +18,19 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Editar Celular</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Editar Celular</h2>
+        </div>
+
+        <div class="header-buttons">
+            <a href="/inventario"><button class="btn-secundario">&larr; Volver al Inventario</button></a>
+        </div>
     </header>
 
     <div class="container">
 
-        <div style="margin-bottom: 20px;">
-            <a href="/inventario"><button style="background-color: #6c757d;">&larr; Volver al Inventario</button></a>
-        </div>
-
-        <form action="/actualizar_celular" method="POST">
+        <form action="/actualizar_celular" method="POST" class="form-card">
             <input type="hidden" name="id" value="{{ celular.id }}">
 
             <label>Marca</label>
@@ -43,7 +45,7 @@
             <label>Stock</label>
             <input type="number" name="stock" value="{{ celular.stock }}" required>
 
-            <button type="submit">Actualizar Celular</button>
+            <button type="submit" class="btn-principal">Actualizar Celular</button>
         </form>
     </div>
 </body>

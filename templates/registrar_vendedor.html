@@ -19,17 +19,19 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Registrar Vendedor</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Registrar Vendedor</h2>
+        </div>
+
+        <div class="header-buttons">
+            <a href="/admin"><button class="btn-secundario">&larr; Volver al Panel Admin</button></a>
+        </div>
     </header>
 
     <div class="container">
 
-        <div style="margin-bottom: 20px;">
-            <a href="/admin"><button style="background-color: #6c757d;">&larr; Volver al Panel Admin</button></a>
-        </div>
-
-        <form method="POST">
+        <form method="POST" class="form-card">
 
             <label>Usuario</label>
             <input type="text" name="usuario" required>
@@ -37,7 +39,7 @@
             <label>Password</label>
             <input type="password" name="password" required>
 
-            <button>Registrar Vendedor</button>
+            <button type="submit" class="btn-principal">Registrar Vendedor</button>
 
         </form>
 

@@ -19,9 +19,13 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Panel Vendedor ({{ session['user'] }})</h2>
-        <a href="/logout"><button style="background-color: #dc3545;">Cerrar Sesión</button></a>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Panel Vendedor ({{ session['user'] }})</h2>
+        </div>
+        <div class="header-buttons">
+            <a href="/logout"><button style="background-color: #dc3545;">Cerrar Sesión</button></a>
+        </div>
     </header>
 
     <div class="container">

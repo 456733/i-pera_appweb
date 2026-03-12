@@ -19,20 +19,21 @@
     {% endwith %}
 
     <header>
-        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
-        <h2>Registrar Venta</h2>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
+            <h2>Registrar Venta</h2>
+        </div>
+
+        <div class="header-buttons">
+            <a href="/vendedor"><button class="btn-secundario">&larr; Volver al Panel Vendedor</button></a>
+        </div>
     </header>
 
     <div class="container">
 
-        <div style="margin-bottom: 20px;">
-            <a href="/vendedor"><button style="background-color: #6c757d;">&larr; Volver al Panel Vendedor</button></a>
-        </div>
+        <form action="/registrar_venta" method="POST" class="form-card" style="max-width: 800px;">
 
-        <form action="/registrar_venta" method="POST">
-
-            <div
-                style="background:#f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ddd;">
+            <div style="background:#F6F3EA; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #C2CDD5; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                 <label>Seleccionar Celular</label>
                 <select id="select_celular">
                     <option value="">-- Seleccione un producto --</option>
@@ -42,15 +43,19 @@
                     {% endfor %}
                 </select>
 
-                <label>Cantidad</label>
-                <input type="number" id="input_cantidad" min="1" value="1" style="width: 150px; display: inline-block;">
-
-                <button type="button" onclick="agregarAlCarrito()"
-                    style="background-color: #28a745; margin-top: 10px;">+ Añadir al Carrito</button>
+                <div style="display: flex; gap: 15px; align-items: flex-end;">
+                    <div style="flex: 1;">
+                        <label>Cantidad</label>
+                        <input type="number" id="input_cantidad" min="1" value="1" style="margin-bottom: 0;">
+                    </div>
+                    <button type="button" onclick="agregarAlCarrito()" class="btn-principal" style="margin-top: 0; margin-bottom: 0; width: auto; padding: 12px 20px; background-color: #28a745;">+ Añadir al Carrito</button>
+                </div>
             </div>
 
-            <h3>Carrito de Compras</h3>
-            <table id="tabla_carrito" style="margin-bottom: 20px;">
+            <h3 style="text-align: left; margin-bottom: 10px; color: #303854;">Carrito de Compras</h3>
+            
+            <div class="tabla-wrapper" style="box-shadow: none; border: 1px solid #C2CDD5;">
+                <table id="tabla_carrito" class="tabla-reservas">
                 <thead>
                     <tr>
                         <th>Producto</th>
@@ -71,7 +76,8 @@
                         <th colspan="2" id="total_general">$0.00</th>
                     </tr>
                 </tfoot>
-            </table>
+                </table>
+            </div>
 
             <div id="inputs_ocultos"></div>
 
@@ -85,7 +91,7 @@
             </select>
 
             <div id="campos_tarjeta"
-                style="display:none; margin-top:10px; padding:15px; background:#f9f9f9; border:1px solid #ccc; border-radius:5px;">
+                style="display:none; margin-top:15px; padding:20px; background:#F6F3EA; border:1px solid #C2CDD5; border-radius:12px;">
                 <label>Tipo de Tarjeta</label>
                 <select name="tipo_tarjeta">
                     <option value="credito">Crédito</option>
@@ -102,8 +108,8 @@
             </div>
 
             <div id="campos_plataformas"
-                style="display:none; margin-top:10px; padding:15px; background:#f9f9f9; border:1px solid #ccc; border-radius:5px; text-align:center;">
-                <p><strong>Transferencia: </strong> 300 123 4567</p>
+                style="display:none; margin-top:15px; padding:20px; background:#F6F3EA; border:1px solid #C2CDD5; border-radius:12px; text-align:center;">
+                <p style="margin-bottom: 15px; color:#303854; font-size: 16px;"><strong>Alias / CVU: </strong> ipera.pagos</p>
                 <!-- O aquí iría tu código QR -->
                 <div
                     style="width:120px; height:120px; background:#ddd; margin:10px auto; line-height:120px; border:2px dashed #999;">
@@ -112,7 +118,7 @@
                 <input type="text" name="comprobante_pago" placeholder="# de transferencia">
             </div>
 
-            <button type="submit" style="margin-top:20px;">Confirmar y Registrar Venta</button>
+            <button type="submit" class="btn-principal" style="margin-top:25px; padding: 18px; font-size: 18px;">Confirmar y Registrar Venta</button>
 
         </form>
 

@@ -1,0 +1,122 @@
+/* ============================= */
+/*        LOGIN ADMIN CSS        */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #F6F3EA; /* Fondo principal (Aa) */
+}
+
+/* Contenedor principal */
+.login-container {
+    background: #C2CDD5; /* Tarjetas / secciones (Dd) */
+    padding: 40px;
+    width: 350px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(48, 56, 84, 0.2); /* Sombra sutil con el color Gg */
+    text-align: center;
+}
+
+/* Título */
+.login-container h2 {
+    color: #303854; /* Texto y botones (Gg) */
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+/* Formulario */
+.login-container form {
+    text-align: left;
+}
+
+.login-container label {
+    color: #303854; /* Texto y botones (Gg) */
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Inputs */
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #303854;
+    border-radius: 8px;
+    background-color: #F6F3EA; /* Fondo de input como el principal para dar contraste sobre la tarjeta */
+    color: #303854; /* Letra Gg */
+    outline: none;
+    transition: 0.3s;
+}
+
+.login-container input:focus {
+    border-color: #303854;
+    box-shadow: 0 0 5px rgba(48, 56, 84, 0.5); /* Sombra de focus con color Gg */
+}
+
+/* Botón */
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background: #303854; /* Botón color Gg */
+    border: none;
+    border-radius: 8px;
+    color: #F6F3EA; /* Texto claro encima del botón oscuro */
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.login-container button:hover {
+    background: #1e2436; /* Un tono más oscuro de Gg */
+    transform: scale(1.03);
+}
+
+/* Texto inferior (opcional si lo quieres sumar en el futuro) */
+.login-container p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #303854;
+}
+
+.login-container a {
+    color: #303854;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-container a:hover {
+    text-decoration: underline;
+}
+
+/* Poner los flashes (errores) arriba al centro */
+.flashes {
+    list-style: none;
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.flashes li {
+    display: inline-block;
+    background: #303854; /* Mismos tonos que botón */
+    color: #F6F3EA;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
