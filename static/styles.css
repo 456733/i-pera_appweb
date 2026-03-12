@@ -61,3 +61,8 @@ select {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+.logo-ipera {
+    width: 80px;
+    height: auto;
+}

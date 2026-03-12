@@ -261,35 +261,65 @@ def registrar_venta():
         celulares = cursor.fetchall()
         return render_template("registrar_venta.html", celulares=celulares)
 
-    celular_id = request.form["celular_id"]
-    precio = request.form["precio"]
-    metodo_pago = request.form["metodo_pago"]
+    celulares_ids = request.form.getlist("celular_id[]")
+    cantidades = request.form.getlist("cantidad[]")
+    metodo_pago = request.form.get("metodo_pago")
 
-    # verificar inventario (Consistencia de Inventario RNF 06, R05)
-    cursor.execute("SELECT stock FROM celulares WHERE id=%s",(celular_id,))
-    celular = cursor.fetchone()
-
-    if not celular or celular["stock"] <= 0:
-        flash("Operación rechazada: No hay stock disponible de este producto.", "error")
+    if not celulares_ids or not cantidades:
+        flash("Operación rechazada: El carrito está vacío.", "error")
         return redirect(url_for("registrar_venta"))
 
-    # registrar venta
-    sql = """
-    INSERT INTO ventas (celular_id,precio,metodo_pago)
-    VALUES (%s,%s,%s)
-    """
-    cursor.execute(sql,(celular_id,precio,metodo_pago))
+    try:
+        elementos_venta = []
+        total_pago = 0.0
 
-    # actualizar inventario en tiempo real
-    sql_update = """
-    UPDATE celulares
-    SET stock = stock - 1
-    WHERE id=%s
-    """
-    cursor.execute(sql_update,(celular_id,))
-    db.commit()
-    
-    flash("Venta registrada exitosamente.", "success")
+        # Validaciones de stock y recolección de precios desde BD
+        for cid, cant_str in zip(celulares_ids, cantidades):
+            cant = int(cant_str)
+            if cant <= 0:
+                continue
+
+            cursor.execute("SELECT marca, modelo, stock, precio FROM celulares WHERE id=%s", (cid,))
+            celular = cursor.fetchone()
+
+            if not celular:
+                flash("Operación rechazada: Dispositivo no encontrado.", "error")
+                return redirect(url_for("registrar_venta"))
+                
+            if celular["stock"] < cant:
+                flash(f"Operación rechazada: Stock insuficiente para el {celular['marca']} {celular['modelo']}. Solicitados: {cant}, Disponibles: {celular['stock']}.", "error")
+                return redirect(url_for("registrar_venta"))
+
+            precio_linea = float(celular["precio"]) * cant
+            total_pago += precio_linea
+            elementos_venta.append({
+                "id": cid,
+                "cantidad": cant,
+                "precio_total": precio_linea
+            })
+
+        if not elementos_venta:
+            flash("Operación rechazada: No ingresaste cantidades válidas.", "error")
+            return redirect(url_for("registrar_venta"))
+
+        # Inserciones y Descuento de inventario
+        for item in elementos_venta:
+            sql_venta = """
+            INSERT INTO ventas (celular_id, precio, cantidad, metodo_pago)
+            VALUES (%s, %s, %s, %s)
+            """
+            cursor.execute(sql_venta, (item["id"], item["precio_total"], item["cantidad"], metodo_pago))
+
+            sql_stock = "UPDATE celulares SET stock = stock - %s WHERE id = %s"
+            cursor.execute(sql_stock, (item["cantidad"], item["id"]))
+
+        db.commit()
+        flash(f"Venta confirmada exitosamente. Total cobrado: ${total_pago:,.2f}", "success")
+        
+    except Exception as e:
+        db.rollback()
+        flash(f"Ocurrió un error al procesar la venta: {str(e)}", "error")
+
     return redirect(url_for("ventas"))
 
 # ===============================
@@ -299,10 +329,11 @@ def ventas():
 
     sql = """
     SELECT ventas.id, celulares.marca, celulares.modelo,
-    ventas.precio, ventas.metodo_pago, ventas.fecha
+    ventas.precio, ventas.cantidad, ventas.metodo_pago, ventas.fecha
 
     FROM ventas
     JOIN celulares ON ventas.celular_id = celulares.id
+    ORDER BY ventas.fecha DESC
     """
     cursor.execute(sql)
 

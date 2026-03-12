@@ -3,7 +3,7 @@
 
 <head>
     <title>Historial de Ventas</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2">
 </head>
 
 <body>
@@ -18,6 +18,7 @@
     {% endwith %}
 
     <header>
+        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
         <h2>Historial de Ventas</h2>
     </header>
 
@@ -31,7 +32,8 @@
             <tr>
                 <th>ID Venta</th>
                 <th>Celular</th>
-                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Precio Total</th>
                 <th>Método Pago</th>
                 <th>Fecha</th>
             </tr>
@@ -39,8 +41,9 @@
             <tr>
                 <td>{{v.id}}</td>
                 <td>{{v.marca}} {{v.modelo}}</td>
-                <td>{{v.precio}}</td>
-                <td>{{v.metodo_pago}}</td>
+                <td>{{v.cantidad}}</td>
+                <td>${{ '{:,.2f}'.format(v.precio) if v.precio else '0.00' }}</td>
+                <td style="text-transform: capitalize;">{{v.metodo_pago}}</td>
                 <td>{{v.fecha}}</td>
             </tr>
             {% else %}

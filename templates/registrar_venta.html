@@ -3,7 +3,7 @@
 
 <head>
     <title>Registrar Venta</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2">
 </head>
 
 <body>
@@ -19,6 +19,7 @@
     {% endwith %}
 
     <header>
+        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
         <h2>Registrar Venta</h2>
     </header>
 
@@ -30,18 +31,51 @@
 
         <form action="/registrar_venta" method="POST">
 
-            <label>Celular</label>
+            <div
+                style="background:#f9f9f9; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ddd;">
+                <label>Seleccionar Celular</label>
+                <select id="select_celular">
+                    <option value="">-- Seleccione un producto --</option>
+                    {% for c in celulares %}
+                    <option value="{{c.id}}" data-precio="{{c.precio}}" data-nombre="{{c.marca}} {{c.modelo}}"
+                        data-stock="{{c.stock}}">{{c.marca}} {{c.modelo}} (Stk: {{c.stock}}) - ${{c.precio}}</option>
+                    {% endfor %}
+                </select>
 
-            <select name="celular_id" required>
-                <option value="">-- Seleccione un producto --</option>
-                {% for c in celulares %}
-                <option value="{{c.id}}">{{c.marca}} {{c.modelo}} (Stk: {{c.stock}})</option>
-                {% endfor %}
-            </select>
+                <label>Cantidad</label>
+                <input type="number" id="input_cantidad" min="1" value="1" style="width: 150px; display: inline-block;">
 
-            <label>Precio de Venta</label>
-            <input type="number" name="precio" min="0" step="0.01" required>
+                <button type="button" onclick="agregarAlCarrito()"
+                    style="background-color: #28a745; margin-top: 10px;">+ Añadir al Carrito</button>
+            </div>
 
+            <h3>Carrito de Compras</h3>
+            <table id="tabla_carrito" style="margin-bottom: 20px;">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio Un.</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="carrito_body">
+                    <tr id="fila_vacia">
+                        <td colspan="5" style="text-align:center;">El carrito está vacío</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" style="text-align: right;">Total General:</th>
+                        <th colspan="2" id="total_general">$0.00</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div id="inputs_ocultos"></div>
+
+            <hr>
             <label>Método de pago</label>
             <select name="metodo_pago" id="metodo_pago" onchange="mostrarCamposPago()" required>
                 <option value="">-- Seleccione --</option>
@@ -90,6 +124,92 @@
             document.getElementById("campos_tarjeta").style.display = (metodo === "tarjeta") ? "block" : "none";
             document.getElementById("campos_plataformas").style.display = (metodo === "plataformas") ? "block" : "none";
         }
+
+        let totalCarrito = 0;
+        let pIndex = 0;
+
+        function agregarAlCarrito() {
+            let select = document.getElementById("select_celular");
+            let inputCantidad = document.getElementById("input_cantidad");
+
+            let id = select.value;
+            let cantidad = parseInt(inputCantidad.value);
+
+            if (!id || isNaN(cantidad) || cantidad <= 0) {
+                alert("Seleccione un producto y una cantidad válida.");
+                return;
+            }
+
+            let option = select.options[select.selectedIndex];
+            let nombre = option.getAttribute("data-nombre");
+            let precio = parseFloat(option.getAttribute("data-precio"));
+            let stock = parseInt(option.getAttribute("data-stock"));
+
+            if (cantidad > stock) {
+                alert("La cantidad solicitada (" + cantidad + ") excede el stock disponible (" + stock + ").");
+                return;
+            }
+
+            let subtotal = precio * cantidad;
+            totalCarrito += subtotal;
+
+            let tbody = document.getElementById("carrito_body");
+            let filaVacia = document.getElementById("fila_vacia");
+            if (filaVacia) filaVacia.remove();
+
+            pIndex++;
+            let fila_id = "fila_" + pIndex;
+
+            // Fila visual
+            let tr = document.createElement("tr");
+            tr.id = fila_id;
+            tr.innerHTML = `
+                <td>${nombre}</td>
+                <td>$${precio.toFixed(2)}</td>
+                <td>${cantidad}</td>
+                <td>$${subtotal.toFixed(2)}</td>
+                <td><button type="button" onclick="eliminarDelCarrito('${fila_id}', ${subtotal})" style="background-color: #dc3545; padding: 5px 10px;">X</button></td>
+            `;
+            tbody.appendChild(tr);
+
+            // Inputs ocultos para el backend
+            let inputsDiv = document.getElementById("inputs_ocultos");
+            inputsDiv.innerHTML += `
+                <div id="hidden_${fila_id}">
+                    <input type="hidden" name="celular_id[]" value="${id}">
+                    <input type="hidden" name="cantidad[]" value="${cantidad}">
+                </div>
+            `;
+
+            actualizarTotal();
+        }
+
+        function eliminarDelCarrito(fila_id, subtotal) {
+            document.getElementById(fila_id).remove();
+            document.getElementById("hidden_" + fila_id).remove();
+
+            totalCarrito -= subtotal;
+            if (totalCarrito < 0) totalCarrito = 0;
+            actualizarTotal();
+
+            let tbody = document.getElementById("carrito_body");
+            if (tbody.children.length === 0) {
+                tbody.innerHTML = '<tr id="fila_vacia"><td colspan="5" style="text-align:center;">El carrito está vacío</td></tr>';
+            }
+        }
+
+        function actualizarTotal() {
+            document.getElementById("total_general").innerText = "$" + totalCarrito.toFixed(2);
+        }
+
+        // Validación antes de submit
+        document.querySelector("form").addEventListener("submit", function (e) {
+            let inputs = document.getElementsByName("celular_id[]");
+            if (inputs.length === 0) {
+                e.preventDefault();
+                alert("El carrito está vacío. Añada al menos un producto antes de registrar la venta.");
+            }
+        });
     </script>
 
 </body>

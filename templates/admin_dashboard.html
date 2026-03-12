@@ -3,7 +3,7 @@
 
 <head>
     <title>Admin</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/styles.css?v=2">
 </head>
 
 <body>
@@ -19,11 +19,13 @@
     {% endwith %}
 
     <header>
+        <img src="/static/icono_ipera.png" alt="Logo iPera" class="logo-ipera">
         <h2>Panel Administrador ({{ session['user'] }})</h2>
-        <a href="/logout">Cerrar Sesión</a>
+        <a href="/logout"><button style="background-color: #dc3545;">Cerrar Sesión</button></a>
     </header>
 
     <div class="container">
+
 
         <a href="/inventario"><button>Inventario</button></a>
         <a href="/registrar_vendedor"><button>Registrar Vendedor</button></a>
