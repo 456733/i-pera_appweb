@@ -289,15 +289,64 @@ td a:hover {
 
 /* ====== RESPONSIVE ====== */
 @media (max-width: 768px) {
-    header {
+    /* Navbar y Header colapsado */
+    .navbar, header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
+        padding: 15px 10px;
+    }
+    
+    header > div {
+        flex-direction: column;
     }
 
-    .container > a > button {
+    /* Animación del Header más pequeña en móviles */
+    .header-loader {
+        font-size: 18px;
+        height: 25px;
+    }
+    .header-word {
+        line-height: 25px;
+    }
+
+    /* Contenedores y Formularios al 100% */
+    .container, .admin-container {
+        padding: 20px 10px;
+    }
+    
+    .form-card, .card {
+        padding: 20px 15px;
+        width: 100%;
+    }
+
+    /* Botones del Dashboard (Apilados) */
+    .dashboard-menu {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn-dashboard {
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+
+    /* Botones generales más ajustados */
+    .container > a > button, .btn-principal, .btn-secundario {
         font-size: 14px;
         padding: 12px;
+    }
+
+    /* Tablas con scroll horizontal asegurado */
+    .tabla-wrapper {
+        box-shadow: none;
+        border: 1px solid #C2CDD5;
+        border-radius: 8px;
+    }
+    th, td {
+        padding: 10px 8px;
+        font-size: 12px;
     }
 }
 
@@ -309,29 +358,32 @@ td a:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
+    align-items: center;
+    gap: 40px; /* Más separación entre ellos */
     width: 100%;
-    margin-bottom: 20px;
+    margin-top: 50px; /* Empujar hacia abajo para centrar en pantalla */
+    margin-bottom: 50px;
 }
 
 .dashboard-menu a {
     text-decoration: none;
+    display: flex; /* Para que el a tome el tamaño del botón */
 }
 
 .btn-dashboard {
-    font-size: 1.2rem;
-    padding: 1rem 2.5rem;
+    font-size: 1.6rem; /* Texto más grande */
+    padding: 1.5rem 3.5rem; /* Botones más anchos y altos */
     border: none;
     outline: none;
-    border-radius: 0.4rem;
+    border-radius: 0.8rem; /* Bordes un poco más suaves acordes al tamaño */
     cursor: pointer;
     text-transform: uppercase;
     background-color: rgb(14, 14, 26);
     color: rgb(234, 234, 234);
     font-weight: 700;
     transition: 0.6s;
-    box-shadow: 0px 0px 60px #1f4c65;
-    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+    box-shadow: 0px 0px 80px #1f4c65; /* Sombra más pronunciada acorde al tamaño */
+    -webkit-box-reflect: below 15px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4)); /* Reflejo más bajo */
 }
 
 .btn-dashboard:active {
